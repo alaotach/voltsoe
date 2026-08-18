@@ -68,7 +68,7 @@ export default function CompleteProfileForm({
         department: formData.department,
         phone: formData.phone.trim() || null,
         role: 'student',
-        is_verified: false,
+        is_verified: true,
         email_verified: true,
       },
       { onConflict: 'id' }
