@@ -15,7 +15,7 @@ export default async function AdminPointsPage() {
 
   const { data: transactions } = await supabase
     .from('point_transactions')
-    .select('*, user:users(full_name, enrollment_number), event:events(title)')
+    .select('*, user:users!point_transactions_user_id_fkey(full_name, enrollment_number), event:events(title)')
     .eq('season_id', season?.id ?? '')
     .order('created_at', { ascending: false })
     .limit(100)
