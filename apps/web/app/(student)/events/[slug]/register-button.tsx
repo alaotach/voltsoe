@@ -1,0 +1,74 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Loader2 } from 'lucide-react'
+
+export default function RegisterButton({
+  eventId,
+  eventSlug,
+  canRegister,
+  isRegistered,
+  isFull,
+  registrationOpen,
+  status,
+}: {
+  eventId: string
+  eventSlug: string
+  canRegister: boolean
+  isRegistered: boolean
+  isFull: boolean
+  registrationOpen: boolean
+  status: string | null
+}) {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  async function handleRegister() {
+    setLoading(true)
+    setError('')
+    const res = await fetch(`/api/events/${eventId}/register`, { method: 'POST' })
+    if (res.ok) {
+      router.refresh()
+    } else {
+      const body = await res.json()
+      setError(body.error ?? 'Registration failed.')
+    }
+    setLoading(false)
+  }
+
+  if (!registrationOpen) {
+    return (
+      <button disabled className="btn btn-secondary" style={{ width: '100%' }}>
+        Registration Closed
+      </button>
+    )
+  }
+
+  if (isFull && !isRegistered) {
+    return (
+      <button disabled className="btn btn-secondary" style={{ width: '100%' }}>
+        Event Full
+      </button>
+    )
+  }
+
+  if (canRegister) {
+    return (
+      <div>
+        <button
+          onClick={handleRegister}
+          disabled={loading}
+          className="btn btn-primary"
+          style={{ width: '100%' }}
+        >
+          {loading ? <Loader2 size={16} className="animate-spin" /> : 'Register Now'}
+        </button>
+        {error && <p style={{ color: '#EF4444', fontSize: '0.8rem', marginTop: 8 }}>{error}</p>}
+      </div>
+    )
+  }
+
+  return null
+}
