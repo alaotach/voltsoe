@@ -1,0 +1,13 @@
+[build]
+  # Set the base directory to where the Next.js app lives
+  base = "apps/web"
+  
+  # The build command for Next.js
+  command = "npm run build"
+  
+  # Next.js outputs its build to the .next folder
+  publish = ".next"
+
+# Use the official Next.js plugin for Netlify
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
