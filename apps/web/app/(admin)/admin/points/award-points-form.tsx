@@ -24,7 +24,8 @@ export default function AwardPointsForm({
     setError('')
     setSuccess('')
 
-    const formData = new FormData(e.currentTarget)
+    const form = e.currentTarget
+    const formData = new FormData(form)
     formData.append('seasonId', seasonId)
 
     const res = await awardManualPoints(formData)
@@ -33,7 +34,7 @@ export default function AwardPointsForm({
       setError(res.error)
     } else {
       setSuccess('Points awarded successfully!')
-      e.currentTarget.reset()
+      form.reset()
       router.refresh()
       setTimeout(() => setSuccess(''), 3000)
     }
