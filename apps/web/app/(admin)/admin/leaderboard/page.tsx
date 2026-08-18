@@ -7,8 +7,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function AdminLeaderboardPage() {
   const supabase = await createClient()
-  const seasonId = process.env.NEXT_PUBLIC_SEASON_ID
-  const { data: season } = await supabase.from('seasons').select('id, name').eq(seasonId ? 'id' : 'is_active', seasonId ?? true).single()
+  const season = await getViewingSeason(true)
 
   const { data: entries } = await supabase
     .from('leaderboard_view')

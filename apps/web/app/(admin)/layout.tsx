@@ -31,7 +31,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <AdminNav
         user={profile}
         seasonName={season?.name}
-        isPreviewing={!!previewSeasonId && previewSeasonId !== process.env.NEXT_PUBLIC_SEASON_ID}
+        isPreviewing={!!previewSeasonId && previewSeasonId !== season?.id}
       />
       <main
         style={{

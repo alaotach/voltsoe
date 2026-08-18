@@ -15,8 +15,7 @@ export default async function NewProjectPage() {
 
   const { data: profile } = await supabase.from('users').select('is_verified, email_verified').eq('id', user.id).single()
 
-  const seasonId = process.env.NEXT_PUBLIC_SEASON_ID
-  const { data: season } = await supabase.from('seasons').select('id').eq(seasonId ? 'id' : 'is_active', seasonId ?? true).single()
+  const season = await getViewingSeason()
 
   const { data: events } = await supabase
     .from('events')

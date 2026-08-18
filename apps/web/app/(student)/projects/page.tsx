@@ -19,12 +19,7 @@ export default async function ProjectsPage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const seasonId = process.env.NEXT_PUBLIC_SEASON_ID
-  const { data: season } = await supabase
-    .from('seasons')
-    .select('id')
-    .eq(seasonId ? 'id' : 'is_active', seasonId ?? true)
-    .single()
+  const season = await getViewingSeason()
 
   let query = supabase
     .from('projects')

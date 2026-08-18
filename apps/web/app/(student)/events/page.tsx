@@ -114,12 +114,10 @@ export default async function EventsPage({
               >
                 {/* Cover */}
                 {event.cover_image_url ? (
-                  <div
-                    style={{
-                      height: 160,
-                      background: `url(${event.cover_image_url}) center/cover`,
-                      position: 'relative',
-                    }}
+                  <img
+                    src={event.cover_image_url}
+                    alt={event.title}
+                    style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'contain' }}
                   />
                 ) : (
                   <div

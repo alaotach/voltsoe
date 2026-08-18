@@ -4,7 +4,10 @@ import { NextResponse } from 'next/server'
 export async function GET(request: Request) {
   const supabase = await createClient()
   const url = new URL(request.url)
-  const seasonId = url.searchParams.get('seasonId') ?? process.env.NEXT_PUBLIC_SEASON_ID
+  const seasonId = url.searchParams.get('seasonId')
+  const season = seasonId 
+    ? (await supabase.from('seasons').select('id').eq('id', seasonId).single()).data
+    : await getViewingSeason(false)
   const limit = parseInt(url.searchParams.get('limit') ?? '100')
   const offset = parseInt(url.searchParams.get('offset') ?? '0')
 
@@ -15,7 +18,7 @@ export async function GET(request: Request) {
   const { data, error } = await supabase
     .from('leaderboard_view')
     .select('*')
-    .eq('season_id', seasonId)
+    .eq('season_id', season?.id ?? '')
     .order('rank', { ascending: true })
     .range(offset, offset + limit - 1)
 

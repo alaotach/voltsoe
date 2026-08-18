@@ -8,8 +8,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function AdminPointsPage() {
   const supabase = await createClient()
-  const seasonId = process.env.NEXT_PUBLIC_SEASON_ID
-  const { data: season } = await supabase.from('seasons').select('id').eq(seasonId ? 'id' : 'is_active', seasonId ?? true).single()
+  const season = await getViewingSeason(true)
 
   const { data: transactions } = await supabase
     .from('point_transactions')

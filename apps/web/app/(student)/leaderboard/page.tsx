@@ -14,12 +14,7 @@ export default async function LeaderboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const seasonId = process.env.NEXT_PUBLIC_SEASON_ID
-  const { data: season } = await supabase
-    .from('seasons')
-    .select('*')
-    .eq(seasonId ? 'id' : 'is_active', seasonId ?? true)
-    .single()
+  const season = await getViewingSeason()
 
   const [leaderboard, myRankData] = await Promise.all([
     season ? getLeaderboard(season.id, 50) : Promise.resolve([]),

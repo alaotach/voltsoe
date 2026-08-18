@@ -23,12 +23,7 @@ export default async function ProfilePage() {
     .single()
   if (!profile) redirect('/complete-profile')
 
-  const seasonId = process.env.NEXT_PUBLIC_SEASON_ID
-  const { data: season } = await supabase
-    .from('seasons')
-    .select('id')
-    .eq(seasonId ? 'id' : 'is_active', seasonId ?? true)
-    .single()
+  const season = await getViewingSeason()
 
   const [rankData, badgesResult, txResult, projectsResult, attendanceResult] = await Promise.all([
     season ? getUserRank(user.id, season.id) : null,

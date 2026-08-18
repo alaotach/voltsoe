@@ -12,8 +12,7 @@ export default async function AdminOverviewPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const seasonId = process.env.NEXT_PUBLIC_SEASON_ID
-  const { data: season } = await supabase.from('seasons').select('*').eq(seasonId ? 'id' : 'is_active', seasonId ?? true).single()
+  const season = await getViewingSeason(true)
   const today = new Date().toISOString().split('T')[0]
 
   const { data: seasonEvents } = await supabase.from('events').select('id').eq('season_id', season?.id ?? '')

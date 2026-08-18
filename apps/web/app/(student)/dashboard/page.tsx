@@ -37,12 +37,7 @@ export default async function DashboardPage() {
   if (!profile) redirect('/complete-profile')
 
   // Get active season
-  const seasonId = process.env.NEXT_PUBLIC_SEASON_ID
-  const { data: season } = await supabase
-    .from('seasons')
-    .select('*')
-    .eq(seasonId ? 'id' : 'is_active', seasonId ?? true)
-    .single()
+  const season = await getViewingSeason()
 
   if (!season) {
     return (

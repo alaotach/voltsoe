@@ -7,11 +7,9 @@ const PREVIEW_COOKIE = 'admin_preview_season'
  * Returns the season ID to use for data queries.
  *
  * Admin pages: checks the admin_preview_season cookie first (set via the
- *   admin season switcher), then falls back to NEXT_PUBLIC_SEASON_ID, then
- *   the DB row where is_active = true.
+ *   admin season switcher), then falls back to the DB row where is_active = true.
  *
- * Student pages (pass isAdmin=false): always uses NEXT_PUBLIC_SEASON_ID or
- *   the active season — never the preview cookie.
+ * Student pages (pass isAdmin=false): always uses the active season — never the preview cookie.
  */
 export async function getViewingSeason(isAdmin = false) {
   const supabase = await createClient()
@@ -24,16 +22,12 @@ export async function getViewingSeason(isAdmin = false) {
     if (preview) seasonId = preview
   }
 
-  if (!seasonId) {
-    seasonId = process.env.NEXT_PUBLIC_SEASON_ID ?? null
-  }
-
   if (seasonId) {
     const { data } = await supabase.from('seasons').select('*').eq('id', seasonId).single()
     if (data) return data
   }
 
-  // Fall back to the currently active season
+  // Fall back to the currently active season from the database
   const { data } = await supabase.from('seasons').select('*').eq('is_active', true).single()
   return data ?? null
 }
