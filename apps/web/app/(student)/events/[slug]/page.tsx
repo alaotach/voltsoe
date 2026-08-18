@@ -77,12 +77,17 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
 
       {/* Cover image */}
       {event.cover_image_url && (
-        <div
+        <img
+          src={event.cover_image_url}
+          alt={event.title}
           style={{
-            height: 280,
-            background: `url(${event.cover_image_url}) center/cover`,
+            width: '100%',
+            height: 'auto',
+            maxHeight: 600,
+            objectFit: 'contain',
             borderRadius: 'var(--radius-xl)',
             marginBottom: 28,
+            backgroundColor: 'rgba(255,255,255,0.02)'
           }}
         />
       )}
