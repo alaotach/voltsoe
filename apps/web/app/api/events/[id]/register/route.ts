@@ -77,3 +77,44 @@ export async function POST(
 
   return NextResponse.json({ success: true })
 }
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id: eventId } = await params
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  // Check event exists
+  const { data: event } = await supabase
+    .from('events')
+    .select('status, date')
+    .eq('id', eventId)
+    .single()
+
+  if (!event) {
+    return NextResponse.json({ error: 'Event not found.' }, { status: 404 })
+  }
+
+  if (new Date(event.date) < new Date(new Date().toDateString())) {
+    return NextResponse.json({ error: 'Cannot unregister from past events.' }, { status: 400 })
+  }
+
+  const { error } = await supabase
+    .from('registrations')
+    .delete()
+    .eq('event_id', eventId)
+    .eq('user_id', user.id)
+    .eq('status', 'registered') // Only allow unregistering if they haven't checked in
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  return NextResponse.json({ success: true })
+}
