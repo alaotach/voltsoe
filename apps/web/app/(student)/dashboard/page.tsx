@@ -1,3 +1,4 @@
+import { getViewingSeason } from '@/lib/season'
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
