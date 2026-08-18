@@ -17,7 +17,6 @@ export default async function AdminStudentsPage({
   let query = supabase
     .from('users')
     .select('*')
-    .eq('role', 'student')
     .order('created_at', { ascending: false })
 
   if (filter === 'verified') query = query.eq('is_verified', true)

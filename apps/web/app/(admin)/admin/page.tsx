@@ -20,7 +20,7 @@ export default async function AdminOverviewPage() {
   const eventIds = (seasonEvents ?? []).map(e => e.id)
 
   const [totalUsers, activeUsers, eventsCompleted, totalRegistrations, recentActions, upcomingEvents] = await Promise.all([
-    supabase.from('users').select('id', { count: 'exact', head: true }).eq('role', 'student'),
+    supabase.from('users').select('id', { count: 'exact', head: true }),
     supabase.from('point_transactions').select('user_id').eq('season_id', season?.id ?? '').limit(1000),
     supabase.from('events').select('id', { count: 'exact', head: true }).eq('status', 'completed').eq('season_id', season?.id ?? ''),
     supabase.from('registrations').select('id', { count: 'exact', head: true }).in('event_id', eventIds.length > 0 ? eventIds : ['00000000-0000-0000-0000-000000000000']),
