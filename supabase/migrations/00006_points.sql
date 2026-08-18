@@ -71,13 +71,17 @@ SELECT
   u.department,
   u.batch,
   u.avatar_url,
-  pt.season_id,
-  SUM(pt.points) AS total_points,
-  RANK() OVER (PARTITION BY pt.season_id ORDER BY SUM(pt.points) DESC) AS rank
+  s.id AS season_id,
+  COALESCE(SUM(pt.points), 0) AS total_points,
+  RANK() OVER (PARTITION BY s.id ORDER BY COALESCE(SUM(pt.points), 0) DESC, u.full_name ASC) AS rank
 FROM public.users u
-JOIN public.point_transactions pt ON pt.user_id = u.id
-WHERE u.is_verified = true AND u.email_verified = true AND u.is_suspended = false
-GROUP BY u.id, u.full_name, u.department, u.batch, u.avatar_url, pt.season_id;
+CROSS JOIN public.seasons s
+LEFT JOIN public.point_transactions pt ON pt.user_id = u.id AND pt.season_id = s.id
+WHERE u.is_verified = true 
+  AND u.email_verified = true 
+  AND u.is_suspended = false 
+  AND u.role = 'student'
+GROUP BY u.id, u.full_name, u.department, u.batch, u.avatar_url, s.id;
 
 CREATE UNIQUE INDEX leaderboard_view_idx ON public.leaderboard_view (id, season_id);
 
