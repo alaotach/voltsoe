@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { awardManualPoints } from './actions'
 import { Loader2, Plus, AlertCircle, Check } from 'lucide-react'
 
+import { useRouter } from 'next/navigation'
+
 export default function AwardPointsForm({
   seasonId,
   users,
@@ -11,6 +13,7 @@ export default function AwardPointsForm({
   seasonId: string
   users: { id: string; full_name: string; enrollment_number: string }[]
 }) {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -31,6 +34,7 @@ export default function AwardPointsForm({
     } else {
       setSuccess('Points awarded successfully!')
       e.currentTarget.reset()
+      router.refresh()
       setTimeout(() => setSuccess(''), 3000)
     }
 
