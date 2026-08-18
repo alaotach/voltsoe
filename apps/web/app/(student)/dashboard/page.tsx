@@ -152,7 +152,7 @@ export default async function DashboardPage() {
           {season.name}
         </p>
         <h1 style={{ fontSize: '2rem', fontWeight: 900, letterSpacing: '-0.04em', marginBottom: 4 }}>
-          {profile.full_name.split(' ')[0]}&apos;s Season
+          Overview
         </h1>
 
         {/* Points + rank hero */}
