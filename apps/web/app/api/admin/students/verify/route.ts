@@ -28,7 +28,7 @@ export async function POST(request: Request) {
   if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 })
 
   const adminClient = await createAdminClient()
-  const { error } = await adminClient.from('users').update({ is_verified: true }).eq('id', userId)
+  const { error } = await adminClient.from('users').update({ is_verified: true, email_verified: true }).eq('id', userId)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
