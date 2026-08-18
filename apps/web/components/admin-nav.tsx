@@ -38,7 +38,7 @@ function NavItem({ href, label, icon: Icon, roles, userRole }: {
 const NAV_ITEMS = [
   { href: '/admin', label: 'Overview', icon: LayoutDashboard, roles: ['vp', 'president', 'super_admin'] },
   { href: '/admin/events', label: 'Events', icon: Calendar, roles: ['core', 'vp', 'president', 'super_admin'] },
-  { href: '/admin/students', label: 'Students', icon: Users, roles: ['president', 'super_admin'] },
+  { href: '/admin/students', label: 'Students', icon: Users, roles: ['core', 'vp', 'president', 'super_admin'] },
   { href: '/admin/points', label: 'Points', icon: Zap, roles: ['vp', 'president', 'super_admin'] },
   { href: '/admin/challenges', label: 'Challenges', icon: Trophy, roles: ['vp', 'president', 'super_admin'] },
   { href: '/admin/leaderboard', label: 'Leaderboard', icon: LayoutGrid, roles: ['core', 'vp', 'president', 'super_admin'] },
