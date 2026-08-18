@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, Zap } from 'lucide-react'
 
+import AwardPointsForm from './award-points-form'
+
 export const metadata: Metadata = { title: 'Points Management' }
 export const dynamic = 'force-dynamic'
 
@@ -24,17 +26,25 @@ export default async function AdminPointsPage() {
     .eq('season_id', season?.id ?? '')
     .eq('is_active', true)
 
+  const { data: users } = await supabase
+    .from('users')
+    .select('id, full_name, enrollment_number')
+    .eq('is_verified', true)
+    .order('full_name')
+
   return (
     <div className="fade-in">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-0.03em' }}>Points</h1>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', marginTop: 4 }}>
-            Award points to students via an event's detail page.
+            Award points to students via an event's detail page or manually below.
           </p>
         </div>
         <Link href="/admin/events" className="btn btn-primary btn-sm"><Zap size={14} /> Go to Events</Link>
       </div>
+
+      <AwardPointsForm seasonId={season?.id ?? ''} users={users ?? []} />
 
       {/* Point Rules */}
       <div className="card" style={{ marginBottom: 24, padding: '20px 24px' }}>
