@@ -56,7 +56,7 @@ export default async function HomePage() {
           <div className="grid grid-rows-[1fr_auto]">
             <div className="relative border-b overflow-hidden" style={{ borderColor: 'var(--color-border)', minHeight: '400px' }}>
               <SplineScene 
-                scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+                scene="https://prod.spline.design/Nmx4Vyeze9wJ-9zm/scene.splinecode"
                 className="w-full h-full absolute inset-0"
               />
             </div>
