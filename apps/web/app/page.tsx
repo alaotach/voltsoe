@@ -52,22 +52,16 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-rows-[1fr_auto]">
-            <div className="grid grid-cols-2">
-              <div className="flex flex-col justify-end p-8 border-r border-b" style={{ borderColor: 'var(--color-border)' }}>
-                <div className="font-barlow font-black text-5xl leading-none mb-1">150<span style={{ color: 'var(--color-volt-orange)' }}>+</span></div>
-                <div className="font-mono text-[0.6rem] uppercase tracking-widest text-muted">Active Members</div>
-              </div>
-              <div className="flex flex-col justify-end p-8 border-b" style={{ borderColor: 'var(--color-border)' }}>
-                <div className="font-barlow font-black text-5xl leading-none mb-1">30<span style={{ color: 'var(--color-volt-yellow)' }}>+</span></div>
-                <div className="font-mono text-[0.6rem] uppercase tracking-widest text-muted">Projects Built</div>
-              </div>
-              <div className="flex flex-col justify-end p-8 border-r" style={{ borderColor: 'var(--color-border)' }}>
-                <div className="font-barlow font-black text-5xl leading-none mb-1">20<span style={{ color: 'var(--color-volt-purple)' }}>+</span></div>
-                <div className="font-mono text-[0.6rem] uppercase tracking-widest text-muted">Events Held</div>
-              </div>
-              <div className="flex flex-col justify-end p-8">
-                <div className="font-barlow font-black text-5xl leading-none mb-1">10<span style={{ color: 'var(--color-volt-blue)' }}>+</span></div>
-                <div className="font-mono text-[0.6rem] uppercase tracking-widest text-muted">Competitions Won</div>
+            <div className="flex flex-col justify-end p-8 lg:p-12 border-b font-mono text-xs md:text-sm text-muted relative overflow-hidden" style={{ borderColor: 'var(--color-border)', minHeight: '300px' }}>
+              <div className="absolute -top-10 -right-10 opacity-5 font-barlow font-black text-[12rem] select-none pointer-events-none leading-none">SYS</div>
+              
+              <div className="relative z-10 fade-in" style={{ animationDelay: '0.5s', animationFillMode: 'both' }}>
+                <div style={{ color: 'var(--color-volt-yellow)' }} className="mb-4">VOLT_OS // Boot Sequence</div>
+                <div className="mb-1.5 flex justify-between max-w-sm"><span>> Mount hardware</span> <span className="text-white">[OK]</span></div>
+                <div className="mb-1.5 flex justify-between max-w-sm"><span>> Load software modules</span> <span className="text-white">[OK]</span></div>
+                <div className="mb-1.5 flex justify-between max-w-sm"><span>> Establish network</span> <span className="text-white">[OK]</span></div>
+                <div className="mb-1.5 flex justify-between max-w-sm"><span>> Calibrate instruments</span> <span className="text-white">[OK]</span></div>
+                <div className="mt-6 flex items-center text-white">> System Ready <span className="w-2 h-4 ml-1.5 bg-white inline-block animate-pulse"></span></div>
               </div>
             </div>
 
