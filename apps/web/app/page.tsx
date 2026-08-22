@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import TopNav from '@/components/top-nav'
 import { ContainerScroll } from '@/components/ui/container-scroll-animation'
+import { SplineScene } from '@/components/ui/splite'
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -53,17 +54,11 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-rows-[1fr_auto]">
-            <div className="flex flex-col justify-end p-8 lg:p-12 border-b font-mono text-xs md:text-sm text-muted relative overflow-hidden" style={{ borderColor: 'var(--color-border)', minHeight: '300px' }}>
-              <div className="absolute -top-10 -right-10 opacity-5 font-barlow font-black text-[12rem] select-none pointer-events-none leading-none">SYS</div>
-              
-              <div className="relative z-10 fade-in" style={{ animationDelay: '0.5s', animationFillMode: 'both' }}>
-                <div style={{ color: 'var(--color-volt-yellow)' }} className="mb-4">VOLT_OS // Boot Sequence</div>
-                <div className="mb-1.5 flex justify-between max-w-sm"><span>&gt; Mount hardware</span> <span className="text-white">[OK]</span></div>
-                <div className="mb-1.5 flex justify-between max-w-sm"><span>&gt; Load software modules</span> <span className="text-white">[OK]</span></div>
-                <div className="mb-1.5 flex justify-between max-w-sm"><span>&gt; Establish network</span> <span className="text-white">[OK]</span></div>
-                <div className="mb-1.5 flex justify-between max-w-sm"><span>&gt; Calibrate instruments</span> <span className="text-white">[OK]</span></div>
-                <div className="mt-6 flex items-center text-white">&gt; System Ready <span className="w-2 h-4 ml-1.5 bg-white inline-block animate-pulse"></span></div>
-              </div>
+            <div className="relative border-b overflow-hidden" style={{ borderColor: 'var(--color-border)', minHeight: '400px' }}>
+              <SplineScene 
+                scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+                className="w-full h-full absolute inset-0"
+              />
             </div>
 
             <div className="relative overflow-hidden p-8" style={{ background: 'var(--color-surface-1)' }}>
