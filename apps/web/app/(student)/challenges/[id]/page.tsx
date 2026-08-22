@@ -11,8 +11,6 @@ export default async function ChallengeDetailPage({ params }: { params: Promise<
   const { id } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
   const { data: challenge } = await supabase
     .from('challenges')
     .select('*')
@@ -21,12 +19,12 @@ export default async function ChallengeDetailPage({ params }: { params: Promise<
 
   if (!challenge) notFound()
 
-  const { data: submission } = await supabase
+  const { data: submission } = user ? await supabase
     .from('submissions')
     .select('*')
     .eq('challenge_id', id)
     .eq('user_id', user.id)
-    .maybeSingle()
+    .maybeSingle() : { data: null }
 
   const rem = timeRemaining(challenge.deadline)
   const isExpired = rem.expired || !challenge.is_active
@@ -75,7 +73,14 @@ export default async function ChallengeDetailPage({ params }: { params: Promise<
               <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem', lineHeight: 1.7 }}>{submission.content}</p>
             </div>
           ) : !isExpired ? (
-            <SubmitChallengeForm challengeId={id} userId={user.id} />
+            user ? (
+              <SubmitChallengeForm challengeId={id} userId={user.id} />
+            ) : (
+              <div className="card" style={{ padding: '24px', textAlign: 'center' }}>
+                <p style={{ marginBottom: 16 }}>You must be signed in to submit this challenge.</p>
+                <a href="/login" className="btn btn-primary" style={{ display: 'inline-flex' }}>Sign In</a>
+              </div>
+            )
           ) : (
             <div style={{ textAlign: 'center', padding: '40px', color: 'var(--color-text-muted)' }}>
               <p>This challenge has expired.</p>

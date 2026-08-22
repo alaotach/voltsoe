@@ -14,8 +14,6 @@ export const metadata: Metadata = {
 export default async function ChallengesPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
   const season = await getViewingSeason()
 
   const { data: challenges } = await supabase
@@ -30,11 +28,11 @@ export default async function ChallengesPage() {
 
   // Get user submissions
   const challengeIds = (challenges ?? []).map((c) => c.id)
-  const { data: submissions } = await supabase
+  const { data: submissions } = user ? await supabase
     .from('submissions')
     .select('challenge_id, status')
     .eq('user_id', user.id)
-    .in('challenge_id', challengeIds)
+    .in('challenge_id', challengeIds) : { data: [] }
 
   const subMap = Object.fromEntries((submissions ?? []).map((s) => [s.challenge_id, s.status]))
 

@@ -13,13 +13,11 @@ export const metadata: Metadata = {
 export default async function LeaderboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
   const season = await getViewingSeason()
 
   const [leaderboard, myRankData] = await Promise.all([
     season ? getLeaderboard(season.id, 50) : Promise.resolve([]),
-    season ? getUserRank(user.id, season.id) : Promise.resolve(null),
+    season && user ? getUserRank(user.id, season.id) : Promise.resolve(null),
   ])
 
   const myRank = myRankData?.rank ?? 0
@@ -134,7 +132,7 @@ export default async function LeaderboardPage() {
           </thead>
           <tbody>
             {leaderboard.map((entry) => {
-              const isMe = entry.id === user.id
+              const isMe = user ? entry.id === user.id : false
               return (
                 <tr
                   key={entry.id}

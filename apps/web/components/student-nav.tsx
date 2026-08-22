@@ -32,7 +32,7 @@ const NAV_ITEMS = [
 
 const ADMIN_ROLES = ['core', 'vp', 'president', 'super_admin']
 
-export default function StudentNav({ user }: { user: User }) {
+export default function StudentNav({ user }: { user: User | null }) {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -64,7 +64,7 @@ export default function StudentNav({ user }: { user: User }) {
       >
         {/* Logo */}
         <div style={{ padding: '24px 20px 20px', borderBottom: '1px solid var(--color-border)' }}>
-          <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span
               style={{
                 fontSize: '1.25rem',
@@ -105,7 +105,7 @@ export default function StudentNav({ user }: { user: User }) {
           })}
 
           {/* Admin link */}
-          {ADMIN_ROLES.includes(user.role) && (
+          {user && ADMIN_ROLES.includes(user.role) && (
             <>
               <div className="divider" style={{ margin: '12px 0' }} />
               <Link href="/admin" className="nav-item">
@@ -123,43 +123,51 @@ export default function StudentNav({ user }: { user: User }) {
             borderTop: '1px solid var(--color-border)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-            <div
-              style={{
-                width: 34,
-                height: 34,
-                borderRadius: '50%',
-                background: 'var(--gradient-volt)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                color: '#0A0A0F',
-                flexShrink: 0,
-              }}
-            >
-              {user.full_name.charAt(0).toUpperCase()}
-            </div>
-            <div style={{ overflow: 'hidden' }}>
-              <p
-                style={{
-                  fontSize: '0.85rem',
-                  fontWeight: 600,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {user.full_name}
-              </p>
-              <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>{user.role}</p>
-            </div>
-          </div>
-          <button onClick={handleSignOut} className="nav-item" style={{ width: '100%', background: 'none', border: 'none', textAlign: 'left' }}>
-            <LogOut size={15} />
-            <span>Sign Out</span>
-          </button>
+          {user ? (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                <div
+                  style={{
+                    width: 34,
+                    height: 34,
+                    borderRadius: '50%',
+                    background: 'var(--gradient-volt)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    color: '#0A0A0F',
+                    flexShrink: 0,
+                  }}
+                >
+                  {user.full_name.charAt(0).toUpperCase()}
+                </div>
+                <div style={{ overflow: 'hidden' }}>
+                  <p
+                    style={{
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {user.full_name}
+                  </p>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>{user.role}</p>
+                </div>
+              </div>
+              <button onClick={handleSignOut} className="nav-item" style={{ width: '100%', background: 'none', border: 'none', textAlign: 'left' }}>
+                <LogOut size={15} />
+                <span>Sign Out</span>
+              </button>
+            </>
+          ) : (
+            <Link href="/login" className="btn btn-primary" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+              Sign In
+            </Link>
+          )}
         </div>
       </aside>
 

@@ -184,6 +184,7 @@ export interface Project {
   demo_video_url: string | null
   tags: string[] | null
   likes_count: number
+  comments_count: number
   is_published: boolean
   created_at: string
 }
@@ -192,6 +193,14 @@ export interface ProjectLike {
   id: string
   project_id: string
   user_id: string
+  created_at: string
+}
+
+export interface ProjectComment {
+  id: string
+  project_id: string
+  user_id: string
+  content: string
   created_at: string
 }
 

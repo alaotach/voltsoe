@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { FolderOpen, Heart, Play, Plus } from 'lucide-react'
+import { FolderOpen, Heart, Play, Plus, MessageSquare } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Projects',
@@ -18,8 +18,6 @@ export default async function ProjectsPage({
   const { sort = 'newest', tag } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
   const season = await getViewingSeason()
 
   let query = supabase
@@ -36,11 +34,11 @@ export default async function ProjectsPage({
 
   // Get user's likes
   const projectIds = (projects ?? []).map((p) => p.id)
-  const { data: myLikes } = await supabase
+  const { data: myLikes } = user ? await supabase
     .from('project_likes')
     .select('project_id')
     .eq('user_id', user.id)
-    .in('project_id', projectIds)
+    .in('project_id', projectIds) : { data: [] }
 
   const likedSet = new Set((myLikes ?? []).map((l) => l.project_id))
 
@@ -51,9 +49,15 @@ export default async function ProjectsPage({
           <h1 style={{ fontSize: '1.75rem', fontWeight: 900, letterSpacing: '-0.04em', marginBottom: 6 }}>Projects</h1>
           <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.9rem' }}>What students are building this season.</p>
         </div>
-        <Link href="/projects/new" className="btn btn-primary btn-sm">
-          <Plus size={15} /> Submit Project
-        </Link>
+        {user ? (
+          <Link href="/projects/new" className="btn btn-primary btn-sm">
+            <Plus size={15} /> Submit Project
+          </Link>
+        ) : (
+          <Link href="/login" className="btn btn-primary btn-sm">
+            Sign in to Submit
+          </Link>
+        )}
       </div>
 
       {/* Filters */}
@@ -67,7 +71,7 @@ export default async function ProjectsPage({
         <div style={{ textAlign: 'center', padding: '80px 0', color: 'var(--color-text-muted)' }}>
           <FolderOpen size={40} style={{ margin: '0 auto 16px', opacity: 0.3 }} />
           <p>No projects yet. Be the first to submit!</p>
-          <Link href="/projects/new" className="btn btn-primary btn-sm" style={{ marginTop: 16 }}>Submit Project</Link>
+          {user && <Link href="/projects/new" className="btn btn-primary btn-sm" style={{ marginTop: 16 }}>Submit Project</Link>}
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
@@ -77,6 +81,7 @@ export default async function ProjectsPage({
             return (
               <div key={project.id} className="card card-hover" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                 {/* Image */}
+                <Link href={`/projects/${project.id}`} style={{ display: 'block' }}>
                 {project.image_url ? (
                   <div style={{ height: 180, background: `url(${project.image_url}) center/cover` }} />
                 ) : (
@@ -92,9 +97,12 @@ export default async function ProjectsPage({
                     <FolderOpen size={36} style={{ opacity: 0.3 }} />
                   </div>
                 )}
+                </Link>
 
                 <div style={{ padding: '16px 18px', flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <h3 style={{ fontWeight: 700, fontSize: '0.95rem', letterSpacing: '-0.02em' }}>{project.title}</h3>
+                  <Link href={`/projects/${project.id}`} style={{ display: 'block' }}>
+                    <h3 style={{ fontWeight: 700, fontSize: '0.95rem', letterSpacing: '-0.02em', transition: 'color 0.2s' }} className="hover-white">{project.title}</h3>
+                  </Link>
                   <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>by {author?.full_name}</p>
 
                   {/* Tags */}
@@ -119,26 +127,47 @@ export default async function ProjectsPage({
                           rel="noopener noreferrer"
                           className="btn btn-ghost btn-sm"
                           style={{ padding: '4px 8px', fontSize: '0.75rem' }}
-                          onClick={(e) => e.stopPropagation()}
                         >
                           <Play size={12} /> Demo
                         </a>
                       )}
+                      
+                      <div className="btn btn-ghost btn-sm" style={{ padding: '4px 8px', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                        <MessageSquare size={13} /> {project.comments_count ?? 0}
+                      </div>
                     </div>
-                    <form action={`/api/projects/${project.id}/like`} method="POST">
-                      <button
-                        type="submit"
-                        className="btn btn-ghost btn-sm"
-                        style={{
-                          padding: '4px 8px',
-                          fontSize: '0.75rem',
-                          color: hasLiked ? '#F472B6' : 'var(--color-text-muted)',
-                        }}
-                      >
-                        <Heart size={13} fill={hasLiked ? '#F472B6' : 'none'} />
-                        {project.likes_count}
-                      </button>
-                    </form>
+                    
+                    {/* Like button */}
+                    <div>
+                      {user ? (
+                        <form action={`/api/projects/${project.id}/like`} method="POST">
+                          <button
+                            type="submit"
+                            className="btn btn-ghost btn-sm"
+                            style={{
+                              padding: '4px 8px',
+                              fontSize: '0.75rem',
+                              color: hasLiked ? '#F472B6' : 'var(--color-text-muted)',
+                            }}
+                          >
+                            <Heart size={13} fill={hasLiked ? '#F472B6' : 'none'} />
+                            {project.likes_count}
+                          </button>
+                        </form>
+                      ) : (
+                        <div
+                          className="btn btn-ghost btn-sm"
+                          style={{
+                            padding: '4px 8px',
+                            fontSize: '0.75rem',
+                            color: 'var(--color-text-muted)',
+                          }}
+                        >
+                          <Heart size={13} fill="none" />
+                          {project.likes_count}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

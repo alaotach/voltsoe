@@ -19,8 +19,6 @@ export default async function EventsPage({
   const { filter = 'upcoming' } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
   const season = await getViewingSeason(false)
 
   const today = new Date().toISOString().split('T')[0]
@@ -41,11 +39,11 @@ export default async function EventsPage({
 
   // Get user's registrations
   const eventIds = (allEvents ?? []).map((e) => e.id)
-  const { data: registrations } = await supabase
+  const { data: registrations } = user ? await supabase
     .from('registrations')
     .select('event_id, status')
     .eq('user_id', user.id)
-    .in('event_id', eventIds)
+    .in('event_id', eventIds) : { data: [] }
 
   const regMap = Object.fromEntries((registrations ?? []).map((r) => [r.event_id, r.status]))
 

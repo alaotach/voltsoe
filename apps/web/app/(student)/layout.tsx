@@ -6,15 +6,15 @@ export default async function StudentLayout({ children }: { children: React.Reac
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) redirect('/login')
+  const { data: profile } = user
+    ? await supabase
+        .from('users')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+    : { data: null }
 
-  const { data: profile } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', user.id)
-    .single()
-
-  if (!profile) redirect('/complete-profile')
+  if (user && !profile) redirect('/complete-profile')
 
   return (
     <div style={{ display: 'flex', minHeight: '100dvh', background: 'var(--color-surface-base)' }}>

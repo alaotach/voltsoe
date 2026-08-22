@@ -34,15 +34,10 @@ export async function updateSession(request: NextRequest) {
   // Routes that require authentication
   const protectedRoutes = [
     '/dashboard',
-    '/events',
-    '/leaderboard',
-    '/challenges',
-    '/projects',
     '/profile',
     '/notifications',
-    '/feed',
-    '/opportunities',
     '/recap',
+    '/projects/new', // explicitly protect project creation
   ]
 
   const isProtected = protectedRoutes.some(

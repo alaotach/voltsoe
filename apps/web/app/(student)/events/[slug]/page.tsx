@@ -20,8 +20,6 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
   const { slug } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
   const { data: event } = await supabase
     .from('events')
     .select('*, point_rules(label, points, is_active)')
@@ -32,12 +30,12 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
   if (!event) notFound()
 
   // Get user registration
-  const { data: registration } = await supabase
+  const { data: registration } = user ? await supabase
     .from('registrations')
     .select('status')
     .eq('event_id', event.id)
     .eq('user_id', user.id)
-    .maybeSingle()
+    .maybeSingle() : { data: null }
 
   // Get registration count
   const { count: regCount } = await supabase
@@ -235,6 +233,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
               isFull={!!isFull}
               registrationOpen={event.registration_open}
               status={registration?.status ?? null}
+              isAuthenticated={!!user}
             />
 
             {event.registration_deadline && (

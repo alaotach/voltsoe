@@ -15,15 +15,13 @@ export const metadata: Metadata = {
 export default async function OpportunitiesPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
   const season = await getViewingSeason()
 
   const now = new Date().toISOString()
   const today = new Date().toISOString().split('T')[0]
 
   const [rankData, challenges, events] = await Promise.all([
-    season ? getUserRank(user.id, season.id) : null,
+    season && user ? getUserRank(user.id, season.id) : null,
     season
       ? supabase
           .from('challenges')
@@ -61,7 +59,9 @@ export default async function OpportunitiesPage() {
           Your Opportunities
         </h1>
         <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.9rem' }}>
-          You&apos;re #{rank} with {points} pts. Here&apos;s how to climb.
+          {user 
+            ? `You're #${rank} with ${points} pts. Here's how to climb.` 
+            : 'Here are some ways to earn points this season.'}
         </p>
       </div>
 

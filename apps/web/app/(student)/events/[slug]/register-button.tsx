@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
+import Link from 'next/link'
 
 export default function RegisterButton({
   eventId,
@@ -12,6 +13,7 @@ export default function RegisterButton({
   isFull,
   registrationOpen,
   status,
+  isAuthenticated,
 }: {
   eventId: string
   eventSlug: string
@@ -20,10 +22,19 @@ export default function RegisterButton({
   isFull: boolean
   registrationOpen: boolean
   status: string | null
+  isAuthenticated: boolean
 }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  if (!isAuthenticated) {
+    return (
+      <Link href="/login" className="btn btn-primary" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        Sign in to Register
+      </Link>
+    )
+  }
 
   async function handleRegister() {
     setLoading(true)
