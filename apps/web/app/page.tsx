@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import TopNav from '@/components/top-nav'
+import { ContainerScroll } from '@/components/ui/container-scroll-animation'
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -116,6 +117,32 @@ export default async function HomePage() {
             ))}
           </div>
         </div>
+
+        {/* ── SHOWCASE SCROLL ── */}
+        <section className="border-b overflow-hidden" style={{ borderColor: 'var(--color-border)' }}>
+          <div className="flex flex-col">
+            <ContainerScroll
+              titleComponent={
+                <>
+                  <h1 className="text-3xl md:text-5xl font-sans font-light text-muted mb-2">
+                    Experience the future of <br />
+                    <span className="text-5xl md:text-[6rem] font-barlow font-black uppercase mt-2 leading-none text-white block">
+                      Hardware Design
+                    </span>
+                  </h1>
+                </>
+              }
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=3840&auto=format&fit=crop"
+                alt="hardware showcase"
+                className="mx-auto rounded-2xl object-cover h-full w-full object-center"
+                draggable={false}
+              />
+            </ContainerScroll>
+          </div>
+        </section>
 
         {/* ── ABOUT ── */}
         <section className="grid grid-cols-1 md:grid-cols-12 border-b" style={{ borderColor: 'var(--color-border)' }}>
