@@ -2,71 +2,23 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Trophy, Zap, FolderOpen, Calendar, ArrowRight } from 'lucide-react'
 
+import TopNav from '@/components/top-nav'
+
 export default async function HomePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  const { data: profile } = user
+    ? await supabase
+        .from('users')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+    : { data: null }
+
   return (
     <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', background: 'var(--color-surface-base)' }}>
-      {/* Top Navigation */}
-      <nav
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '20px 32px',
-          borderBottom: '1px solid var(--color-border)',
-          background: 'rgba(10, 10, 15, 0.8)',
-          backdropFilter: 'blur(12px)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 50,
-        }}
-      >
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span
-            style={{
-              fontSize: '1.5rem',
-              fontWeight: 900,
-              letterSpacing: '-0.04em',
-              background: 'var(--gradient-volt)',
-              WebkitBackgroundClip: 'text',
-              backgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            VOLT
-          </span>
-          <span
-            style={{
-              fontSize: '0.7rem',
-              fontWeight: 700,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color: 'var(--color-text-muted)',
-              marginTop: 4,
-            }}
-          >
-            LEAGUE
-          </span>
-        </Link>
-        <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-          <div style={{ display: 'flex', gap: 24 }} className="hide-on-mobile">
-            <Link href="/leaderboard" style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text-secondary)' }} className="hover-white">Leaderboard</Link>
-            <Link href="/projects" style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text-secondary)' }} className="hover-white">Projects</Link>
-            <Link href="/events" style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text-secondary)' }} className="hover-white">Events</Link>
-          </div>
-          {user ? (
-            <Link href="/dashboard" className="btn btn-primary btn-sm">
-              Dashboard
-            </Link>
-          ) : (
-            <Link href="/login" className="btn btn-primary btn-sm">
-              Sign In
-            </Link>
-          )}
-        </div>
-      </nav>
+      <TopNav user={profile} />
 
       {/* Main Content */}
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>

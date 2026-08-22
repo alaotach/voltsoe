@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import StudentNav from '@/components/student-nav'
+import TopNav from '@/components/top-nav'
 
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -17,13 +17,12 @@ export default async function StudentLayout({ children }: { children: React.Reac
   if (user && !profile) redirect('/complete-profile')
 
   return (
-    <div style={{ display: 'flex', minHeight: '100dvh', background: 'var(--color-surface-base)' }}>
-      <StudentNav user={profile} />
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh', background: 'var(--color-surface-base)' }}>
+      <TopNav user={profile} />
       <main
         style={{
           flex: 1,
-          marginLeft: 240,
-          minHeight: '100dvh',
+          width: '100%',
           padding: '32px 24px',
         }}
         className="student-main"
@@ -34,7 +33,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
       </main>
       <style>{`
         @media (max-width: 768px) {
-          .student-main { margin-left: 0 !important; padding-top: 70px !important; }
+          .student-main { padding-top: 24px !important; }
         }
       `}</style>
     </div>
