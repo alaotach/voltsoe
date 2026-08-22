@@ -57,11 +57,11 @@ export default async function HomePage() {
               
               <div className="relative z-10 fade-in" style={{ animationDelay: '0.5s', animationFillMode: 'both' }}>
                 <div style={{ color: 'var(--color-volt-yellow)' }} className="mb-4">VOLT_OS // Boot Sequence</div>
-                <div className="mb-1.5 flex justify-between max-w-sm"><span>> Mount hardware</span> <span className="text-white">[OK]</span></div>
-                <div className="mb-1.5 flex justify-between max-w-sm"><span>> Load software modules</span> <span className="text-white">[OK]</span></div>
-                <div className="mb-1.5 flex justify-between max-w-sm"><span>> Establish network</span> <span className="text-white">[OK]</span></div>
-                <div className="mb-1.5 flex justify-between max-w-sm"><span>> Calibrate instruments</span> <span className="text-white">[OK]</span></div>
-                <div className="mt-6 flex items-center text-white">> System Ready <span className="w-2 h-4 ml-1.5 bg-white inline-block animate-pulse"></span></div>
+                <div className="mb-1.5 flex justify-between max-w-sm"><span>&gt; Mount hardware</span> <span className="text-white">[OK]</span></div>
+                <div className="mb-1.5 flex justify-between max-w-sm"><span>&gt; Load software modules</span> <span className="text-white">[OK]</span></div>
+                <div className="mb-1.5 flex justify-between max-w-sm"><span>&gt; Establish network</span> <span className="text-white">[OK]</span></div>
+                <div className="mb-1.5 flex justify-between max-w-sm"><span>&gt; Calibrate instruments</span> <span className="text-white">[OK]</span></div>
+                <div className="mt-6 flex items-center text-white">&gt; System Ready <span className="w-2 h-4 ml-1.5 bg-white inline-block animate-pulse"></span></div>
               </div>
             </div>
 
