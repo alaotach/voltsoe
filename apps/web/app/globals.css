@@ -49,6 +49,11 @@
     --shadow-glow-yellow: 0 0 24px rgba(245, 197, 24, 0.15);
     --shadow-glow-purple: 0 0 24px rgba(124, 58, 237, 0.2);
     --shadow-card: 0 2px 16px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3);
+
+    /* Fonts */
+    --font-barlow: var(--font-barlow), 'Barlow Condensed', sans-serif;
+    --font-mono: var(--font-mono), 'JetBrains Mono', monospace;
+    --font-sans: var(--font-sans), 'DM Sans', 'Inter', sans-serif;
   }
 }
 
